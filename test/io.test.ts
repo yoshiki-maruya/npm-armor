@@ -18,6 +18,7 @@ import {
   makeSymlink,
   readFileRaw,
   removePath,
+  symlinksSupported,
   writeFilled,
   writeTree,
 } from "./helpers/fixture-io.js";
@@ -83,7 +84,7 @@ test("T1: oversized files are a dedicated too-large error, default cap is 64MB",
   }
 });
 
-test("readTextFile refuses symlinks and non-files", () => {
+test("readTextFile refuses symlinks and non-files", { skip: !symlinksSupported() }, () => {
   const tmp = makeTempDir();
   try {
     writeTree(tmp, { "real.txt": "x" });
@@ -104,7 +105,7 @@ test("T4: sanitizeForTerminal strips C0, ESC, ANSI sequences, DEL and C1", () =>
   assert.equal(sanitizeForTerminal("日本語テキスト ok"), "日本語テキスト ok");
 });
 
-test("T6: resolveWithinRoot rejects escapes and symlinks", () => {
+test("T6: resolveWithinRoot rejects escapes and symlinks", { skip: !symlinksSupported() }, () => {
   const tmp = makeTempDir();
   const outside = makeTempDir("npm-armor-outside-");
   try {
@@ -162,7 +163,7 @@ test("listDir returns [] for a missing directory", () => {
   }
 });
 
-test("atomicWrite creates, replaces, preserves permissions and refuses symlinks", () => {
+test("atomicWrite creates, replaces, preserves permissions and refuses symlinks", { skip: !symlinksSupported() }, () => {
   const tmp = makeTempDir();
   const outside = makeTempDir("npm-armor-outside-");
   try {

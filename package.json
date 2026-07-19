@@ -19,7 +19,7 @@
     "typecheck:scripts": "tsc -p tsconfig.scripts.json",
     "test": "npm run build && npm run build:test && cd build/test && node --test",
     "check:restrictions": "node scripts/check-restrictions.mts",
-    "check:package": "npm run build && node scripts/check-package.mts",
+    "check:package": "npm run build && npm run build:test && node scripts/check-package.mts",
     "bench": "npm run build && npm run build:test && node scripts/bench.mts"
   },
   "devDependencies": {

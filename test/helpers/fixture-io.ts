@@ -35,6 +35,24 @@ export function makeSymlink(target: string, linkPath: string): void {
   fs.symlinkSync(target, linkPath);
 }
 
+let symlinkSupport: boolean | undefined;
+
+/** Windows runners may lack symlink privileges — symlink tests skip there. */
+export function symlinksSupported(): boolean {
+  if (symlinkSupport !== undefined) return symlinkSupport;
+  const dir = makeTempDir("npm-armor-symcheck-");
+  try {
+    fs.writeFileSync(path.join(dir, "t"), "x");
+    fs.symlinkSync(path.join(dir, "t"), path.join(dir, "l"));
+    symlinkSupport = true;
+  } catch {
+    symlinkSupport = false;
+  } finally {
+    removePath(dir);
+  }
+  return symlinkSupport;
+}
+
 export function makeDir(p: string): void {
   fs.mkdirSync(p, { recursive: true });
 }

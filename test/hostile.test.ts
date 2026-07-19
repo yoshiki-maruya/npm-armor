@@ -4,7 +4,9 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import * as path from "node:path";
 import { analyzeProject } from "../src/detect/index.js";
-import { makeSymlink, makeTempDir, removePath, writeTree } from "./helpers/fixture-io.js";
+import { runRules } from "../src/engine/index.js";
+import { allRules } from "../src/rules/index.js";
+import { makeSymlink, makeTempDir, removePath, symlinksSupported, writeFilled, writeTree } from "./helpers/fixture-io.js";
 
 const basePackageJson = JSON.stringify({ name: "hostile", version: "1.0.0" });
 
@@ -60,7 +62,7 @@ test("YAML anchors in pnpm-workspace.yaml are unparseable (undeterminable), not 
   }
 });
 
-test("T6: .npmrc symlinked outside the repository is undeterminable, target never read", () => {
+test("T6: .npmrc symlinked outside the repository is undeterminable, target never read", { skip: !symlinksSupported() }, () => {
   const tmp = makeTempDir();
   const outside = makeTempDir("npm-armor-outside-");
   try {
@@ -75,6 +77,24 @@ test("T6: .npmrc symlinked outside the repository is undeterminable, target neve
   } finally {
     removePath(tmp);
     removePath(outside);
+  }
+});
+
+test("T1: a package-lock.json beyond the 64MB cap is undeterminable, not a crash", () => {
+  const tmp = makeTempDir();
+  try {
+    writeTree(tmp, { "package.json": basePackageJson });
+    // 64MB + 1 byte of filler — the size gate must reject before any parse.
+    writeFilled(path.join(tmp, "package-lock.json"), 64 * 1024 * 1024 + 1);
+    const a = analyzeProject(tmp);
+    assert.equal(a.lockfile.status, "unparseable");
+    assert.match(a.lockfile.reason ?? "", /size limit/);
+    const findings = runRules(allRules, a);
+    const ar007 = findings.filter((f) => f.ruleId === "AR007");
+    assert.equal(ar007.length, 1);
+    assert.equal(ar007[0]?.severity, "warn");
+  } finally {
+    removePath(tmp);
   }
 });
 

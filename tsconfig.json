@@ -8,7 +8,7 @@
     "types": ["node"],
     "rootDir": "src",
     "outDir": "dist",
-    "declaration": true,
+    "declaration": false,
     "sourceMap": false,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,

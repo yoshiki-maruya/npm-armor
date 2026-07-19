@@ -1,0 +1,39 @@
+name: release
+
+# Publishes via OIDC Trusted Publishing with provenance (design §5.2).
+# Prerequisites (human setup, once): the npm package must be configured with
+# this repository + workflow as a Trusted Publisher, and package.json needs a
+# matching "repository" field. No long-lived npm tokens anywhere.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+  id-token: write # OIDC for npm Trusted Publishing + provenance
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - run: npm run check:restrictions
+      - run: npm run typecheck:scripts
+      - run: node scripts/check-package.mts
+      - run: node scripts/bench.mts
+      # dogfood gate: never release a version that fails its own check
+      - run: node dist/bin/armor.js check
+      # reproducible build: a second clean build must be byte-identical
+      - run: |
+          cp -R dist /tmp/dist-first
+          rm -rf dist
+          npm run build
+          diff -r /tmp/dist-first dist
+      - run: npm publish --provenance --access public
