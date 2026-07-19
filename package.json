@@ -1,0 +1,30 @@
+{
+  "name": "npm-armor",
+  "version": "0.1.0",
+  "description": "Diagnose and fix supply-chain defense settings of JavaScript projects. Zero dependencies, zero network, zero execution.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "armor": "dist/bin/armor.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "build:test": "tsc -p tsconfig.test.json",
+    "typecheck:scripts": "tsc -p tsconfig.scripts.json",
+    "test": "npm run build && npm run build:test && cd build/test && node --test",
+    "check:restrictions": "node scripts/check-restrictions.mts",
+    "check:package": "npm run build && node scripts/check-package.mts",
+    "bench": "npm run build && npm run build:test && node scripts/bench.mts"
+  },
+  "devDependencies": {
+    "@types/node": "26.1.1",
+    "fast-check": "4.9.0",
+    "typescript": "6.0.3"
+  }
+}
