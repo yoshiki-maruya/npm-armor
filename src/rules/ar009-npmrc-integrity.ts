@@ -1,4 +1,5 @@
-import type { Finding, NpmrcDanger, Rule, RuleContext } from "../model.js";
+import type { Finding, NpmrcDanger, PatchPlan, Rule, RuleContext } from "../model.js";
+import { parseNpmrc } from "../adapters/npmrc.js";
 import { finding } from "./util.js";
 
 export const ar009: Rule = {
@@ -45,6 +46,37 @@ export const ar009: Rule = {
       findings.push(dangerFinding(this, danger));
     }
     return findings;
+  },
+
+  // Partial fix (M1): only strict-ssl=false is repaired. Registry overrides
+  // may be legitimate mirrors, and a leaked token must be revoked by a human.
+  fix(ctx: RuleContext): PatchPlan | null {
+    const { config } = ctx;
+    if (config.npmrcStatus !== "ok") return null;
+    const sslDangers = config.npmrcDangers.filter((d) => d.kind === "ssl-off");
+    if (sslDangers.length === 0) return null;
+
+    let text: string;
+    try {
+      text = ctx.io.readTextFile(".npmrc");
+    } catch {
+      return null;
+    }
+    const lines = parseNpmrc(text).lines;
+    const edits: PatchPlan["edits"] = [];
+    for (const d of sslDangers) {
+      const anchor = lines[d.line - 1];
+      if (anchor === undefined) return null; // model out of sync with file — abort, never guess
+      edits.push({ op: "replace-line", anchor, newLine: "strict-ssl=true" });
+    }
+    return {
+      file: ".npmrc",
+      edits,
+      constraints: [
+        "registry overrides and plaintext credentials are reported but not auto-fixed — review them manually",
+      ],
+      baseContent: text,
+    };
   },
 };
 

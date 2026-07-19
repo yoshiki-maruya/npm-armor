@@ -92,6 +92,10 @@ export interface PatchPlan {
   edits: PatchEdit[];
   constraints: string[]; // user-facing caveats, e.g. "npm has no exclude-list equivalent"
   createIfMissing?: boolean;
+  // Content the plan was computed against (undefined = file expected absent).
+  // The writer re-reads immediately before writing and aborts on any
+  // difference (TOCTOU mitigation, design §4.4-a).
+  baseContent?: string;
 }
 
 export interface RuleMeta {

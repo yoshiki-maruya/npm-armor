@@ -1,4 +1,6 @@
-import type { Finding, Rule, RuleContext } from "../model.js";
+import type { Finding, PatchPlan, Rule, RuleContext } from "../model.js";
+import { isIoError } from "../io/index.js";
+import { npmrcGet, parseNpmrc } from "../adapters/npmrc.js";
 import { exampleList, finding } from "./util.js";
 
 export const ar003: Rule = {
@@ -64,5 +66,38 @@ export const ar003: Rule = {
       ];
     }
     return []; // pnpm: no allow-git equivalent; a clean lockfile is the pass condition
+  },
+
+  fix(ctx: RuleContext): PatchPlan | null {
+    const { config, lockfile, project } = ctx;
+    if (project.pm !== "npm") return null; // pnpm has nothing to set
+    if (lockfile.status !== "ok") return null; // undeterminable lockfile: do not lock the door blindly
+    if (lockfile.sources.some((s) => s.kind === "git")) return null; // would break install; humans decide
+    if (config.gitDepsPolicy === "none-allowed") return null; // already strict
+    if (config.npmrcStatus !== "ok" && config.npmrcStatus !== "missing") return null;
+
+    let text: string | undefined;
+    try {
+      text = ctx.io.readTextFile(".npmrc");
+    } catch (e) {
+      if (isIoError(e) && e.kind === "not-found") text = undefined;
+      else return null;
+    }
+    const newLine = "allow-git=none";
+    const constraints = ["requires npm >= 11.10 (older npm silently ignores allow-git)"];
+    if (text === undefined) {
+      return { file: ".npmrc", edits: [{ op: "insert-line", newLine }], constraints, createIfMissing: true };
+    }
+    const data = parseNpmrc(text);
+    const entry = npmrcGet(data, "allow-git");
+    const anchor = entry !== undefined ? data.lines[entry.line - 1] : undefined;
+    return {
+      file: ".npmrc",
+      edits: [
+        anchor !== undefined ? { op: "replace-line", anchor, newLine } : { op: "insert-line", newLine },
+      ],
+      constraints,
+      baseContent: text,
+    };
   },
 };

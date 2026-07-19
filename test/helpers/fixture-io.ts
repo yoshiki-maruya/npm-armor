@@ -47,6 +47,13 @@ export function readFileRaw(p: string): string {
   return fs.readFileSync(p, "utf8");
 }
 
+/** Copy a fixture project into a fresh temp dir (so fixes can write safely). */
+export function copyToTemp(srcDir: string): string {
+  const dest = makeTempDir("npm-armor-fixcopy-");
+  fs.cpSync(srcDir, dest, { recursive: true });
+  return dest;
+}
+
 export function fileExists(p: string): boolean {
   return fs.existsSync(p);
 }
