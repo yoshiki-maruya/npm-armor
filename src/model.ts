@@ -35,6 +35,7 @@ export interface NpmrcDanger {
   key: string;
   kind: NpmrcDangerKind;
   line: number; // 1-based line in .npmrc, for fix anchoring
+  value?: string; // recorded for non-secret kinds only (registry URL, shell path)
 }
 
 export type FileStatus = "ok" | "missing" | "unreadable" | "unparseable" | "not-applicable";
@@ -98,6 +99,8 @@ export interface RuleMeta {
   defaultSeverity: Severity;
   docsSlug: string;
   attackRefs: string[];
+  summary: string; // one-line description for `armor rules`
+  explain: string; // long-form text for `armor explain` (docs/rules mirrors this)
 }
 
 export interface Rule {

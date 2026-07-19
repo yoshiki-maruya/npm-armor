@@ -1,0 +1,97 @@
+[
+  {
+    "ruleId": "AR001",
+    "severity": "warn",
+    "message": "the configured cooldown value cannot be interpreted; treat as unprotected",
+    "fixable": true,
+    "file": ".npmrc"
+  },
+  {
+    "ruleId": "AR002",
+    "severity": "error",
+    "message": "dependency lifecycle scripts run unrestricted — add ignore-scripts=true to .npmrc so no dependency executes code at install time",
+    "fixable": false,
+    "file": ".npmrc"
+  },
+  {
+    "ruleId": "AR003",
+    "severity": "error",
+    "message": "git dependencies present in the lockfile: git-dep — they bypass registry protections (cooldown, provenance, immutability)",
+    "fixable": false,
+    "file": "package-lock.json",
+    "detail": {
+      "count": 1
+    }
+  },
+  {
+    "ruleId": "AR004",
+    "severity": "error",
+    "message": "package-lock.json is listed in .gitignore — remove that entry and commit the lockfile",
+    "fixable": false,
+    "file": "package-lock.json"
+  },
+  {
+    "ruleId": "AR005",
+    "severity": "warn",
+    "message": "CI installs without honoring the lockfile: `npm install` (line 9) — use npm ci / pnpm install --frozen-lockfile",
+    "fixable": false,
+    "file": ".github/workflows/ci.yml",
+    "detail": {
+      "line": 9
+    }
+  },
+  {
+    "ruleId": "AR007",
+    "severity": "error",
+    "message": "1 package(s) resolve over insecure http from registry.evil.example (evil-pkg)",
+    "fixable": false,
+    "file": "package-lock.json",
+    "detail": {
+      "count": 1
+    }
+  },
+  {
+    "ruleId": "AR009",
+    "severity": "error",
+    "message": "strict-ssl=false in .npmrc disables TLS verification for registry traffic",
+    "fixable": true,
+    "file": ".npmrc",
+    "detail": {
+      "line": 2,
+      "key": "strict-ssl"
+    }
+  },
+  {
+    "ruleId": "AR009",
+    "severity": "error",
+    "message": "script-shell is overridden in .npmrc (/bin/bash) — lifecycle scripts run under a non-default interpreter",
+    "fixable": false,
+    "file": ".npmrc",
+    "detail": {
+      "line": 3,
+      "key": "script-shell"
+    }
+  },
+  {
+    "ruleId": "AR009",
+    "severity": "error",
+    "message": "registry override in .npmrc: registry=http://registry.evil.example/ — installs are redirected away from the default registry",
+    "fixable": false,
+    "file": ".npmrc",
+    "detail": {
+      "line": 4,
+      "key": "registry"
+    }
+  },
+  {
+    "ruleId": "AR009",
+    "severity": "error",
+    "message": "plaintext credential in .npmrc (key: //registry.evil.example/:_authToken) — revoke it and reference an environment variable like ${NPM_TOKEN} instead",
+    "fixable": false,
+    "file": ".npmrc",
+    "detail": {
+      "line": 5,
+      "key": "//registry.evil.example/:_authToken"
+    }
+  }
+]

@@ -1,0 +1,9 @@
+[
+  {
+    "ruleId": "AR002",
+    "severity": "info",
+    "message": "lifecycle scripts are limited to an explicit allowlist: esbuild",
+    "fixable": false,
+    "file": "pnpm-workspace.yaml"
+  }
+]

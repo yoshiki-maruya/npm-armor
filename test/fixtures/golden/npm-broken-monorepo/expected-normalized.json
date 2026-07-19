@@ -22,12 +22,14 @@
       {
         "key": "script-shell",
         "kind": "script-shell",
-        "line": 3
+        "line": 3,
+        "value": "/bin/bash"
       },
       {
         "key": "registry",
         "kind": "registry-override",
-        "line": 4
+        "line": 4,
+        "value": "http://registry.evil.example/"
       },
       {
         "key": "//registry.evil.example/:_authToken",

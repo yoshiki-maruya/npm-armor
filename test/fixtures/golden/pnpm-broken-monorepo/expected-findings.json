@@ -1,0 +1,53 @@
+[
+  {
+    "ruleId": "AR001",
+    "severity": "warn",
+    "message": "pnpm-workspace.yaml cannot be interpreted (anchor or alias at line 3); cooldown state is undeterminable",
+    "fixable": false,
+    "file": "pnpm-workspace.yaml"
+  },
+  {
+    "ruleId": "AR002",
+    "severity": "warn",
+    "message": "lifecycle-script policy is undeterminable (anchor or alias at line 3)",
+    "fixable": false,
+    "file": "pnpm-workspace.yaml"
+  },
+  {
+    "ruleId": "AR003",
+    "severity": "error",
+    "message": "git dependencies present in the lockfile: git-dep — they bypass registry protections (cooldown, provenance, immutability)",
+    "fixable": false,
+    "file": "pnpm-lock.yaml",
+    "detail": {
+      "count": 1
+    }
+  },
+  {
+    "ruleId": "AR004",
+    "severity": "error",
+    "message": "pnpm-lock.yaml is listed in .gitignore — remove that entry and commit the lockfile",
+    "fixable": false,
+    "file": "pnpm-lock.yaml"
+  },
+  {
+    "ruleId": "AR005",
+    "severity": "warn",
+    "message": "CI installs without honoring the lockfile: `pnpm install --no-frozen-lockfile` (line 8) — use npm ci / pnpm install --frozen-lockfile",
+    "fixable": false,
+    "file": ".github/workflows/ci.yml",
+    "detail": {
+      "line": 8
+    }
+  },
+  {
+    "ruleId": "AR007",
+    "severity": "error",
+    "message": "1 package(s) resolve over insecure http from registry.evil.example (evil-pkg)",
+    "fixable": false,
+    "file": "pnpm-lock.yaml",
+    "detail": {
+      "count": 1
+    }
+  }
+]

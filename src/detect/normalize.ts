@@ -28,7 +28,7 @@ export function scanNpmrcDangers(data: NpmrcData): NpmrcDanger[] {
   for (const e of data.entries) {
     if (e.normKey === "registry" || e.normKey.endsWith(":registry")) {
       if (!isDefaultRegistry(e.value)) {
-        dangers.push({ key: e.key, kind: "registry-override", line: e.line });
+        dangers.push({ key: e.key, kind: "registry-override", line: e.line, value: e.value });
       }
       continue;
     }
@@ -37,7 +37,7 @@ export function scanNpmrcDangers(data: NpmrcData): NpmrcDanger[] {
       continue;
     }
     if (e.normKey === "script-shell") {
-      dangers.push({ key: e.key, kind: "script-shell", line: e.line });
+      dangers.push({ key: e.key, kind: "script-shell", line: e.line, value: e.value });
       continue;
     }
     const tail = e.normKey.includes(":") ? e.normKey.slice(e.normKey.lastIndexOf(":") + 1) : e.normKey;

@@ -1,0 +1,18 @@
+[
+  {
+    "ruleId": "AR001",
+    "severity": "error",
+    "message": "no release cooldown is configured (recommended: at least 1d)",
+    "fixable": true,
+    "file": "pnpm-workspace.yaml",
+    "detail": {
+      "requiredMinutes": 1440
+    }
+  },
+  {
+    "ruleId": "AR005",
+    "severity": "info",
+    "message": "no GitHub Actions workflows found — when you add CI, install with npm ci / pnpm install --frozen-lockfile",
+    "fixable": false
+  }
+]
