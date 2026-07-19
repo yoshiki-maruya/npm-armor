@@ -1,0 +1,11 @@
+{
+  "name": "golden-npm-broken-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "left-pad": "1.3.0"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}

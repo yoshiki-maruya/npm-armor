@@ -1,0 +1,41 @@
+{
+  "project": {
+    "root": "<root>",
+    "pm": "pnpm",
+    "lockfiles": [
+      "pnpm-lock.yaml"
+    ],
+    "workspaces": [],
+    "packageJsonStatus": "ok",
+    "packageManagerField": "pnpm@10.15.0",
+    "pmVersion": "10.15.0"
+  },
+  "config": {
+    "lifecycleScripts": "unknown",
+    "gitDepsPolicy": "unrestricted",
+    "npmrcDangers": [],
+    "npmrcStatus": "missing",
+    "workspaceYamlStatus": "unparseable",
+    "workspaceYamlIssue": "anchor or alias at line 3",
+    "cooldownUnparseable": true
+  },
+  "lockfile": {
+    "status": "ok",
+    "sources": [
+      {
+        "file": "pnpm-lock.yaml",
+        "name": "evil-pkg",
+        "url": "http://registry.evil.example/evil-pkg/-/evil-pkg-1.0.0.tgz",
+        "kind": "registry-tarball",
+        "integrity": "sha512-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa=="
+      },
+      {
+        "file": "pnpm-lock.yaml",
+        "name": "git-dep",
+        "url": "https://github.com/attacker/git-dep",
+        "kind": "git"
+      }
+    ],
+    "file": "pnpm-lock.yaml"
+  }
+}

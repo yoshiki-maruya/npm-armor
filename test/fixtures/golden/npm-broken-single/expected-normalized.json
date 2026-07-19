@@ -1,0 +1,66 @@
+{
+  "project": {
+    "root": "<root>",
+    "pm": "npm",
+    "lockfiles": [
+      "package-lock.json"
+    ],
+    "workspaces": [],
+    "packageJsonStatus": "ok"
+  },
+  "config": {
+    "lifecycleScripts": "allowed",
+    "gitDepsPolicy": "unrestricted",
+    "npmrcDangers": [
+      {
+        "key": "strict-ssl",
+        "kind": "ssl-off",
+        "line": 2
+      },
+      {
+        "key": "script-shell",
+        "kind": "script-shell",
+        "line": 3
+      },
+      {
+        "key": "registry",
+        "kind": "registry-override",
+        "line": 4
+      },
+      {
+        "key": "//registry.evil.example/:_authToken",
+        "kind": "inline-token",
+        "line": 5
+      }
+    ],
+    "npmrcStatus": "ok",
+    "workspaceYamlStatus": "not-applicable",
+    "cooldownUnparseable": true
+  },
+  "lockfile": {
+    "status": "ok",
+    "sources": [
+      {
+        "file": "package-lock.json",
+        "name": "left-pad",
+        "url": "https://registry.npmjs.org/left-pad/-/left-pad-1.3.0.tgz",
+        "kind": "registry-tarball",
+        "integrity": "sha512-XI5MPzVNApjAyhQzphX8BkmKsKUxD4LdyK24iZeQGinBN9yTQT3bFlCBy/aVx2HrNcqQGsdot8yDtgTWSzvpGw=="
+      },
+      {
+        "file": "package-lock.json",
+        "name": "evil-pkg",
+        "url": "http://registry.evil.example/evil-pkg/-/evil-pkg-1.0.0.tgz",
+        "kind": "registry-tarball",
+        "integrity": "sha512-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa=="
+      },
+      {
+        "file": "package-lock.json",
+        "name": "git-dep",
+        "url": "git+ssh://git@github.com/attacker/git-dep.git#abc123def456",
+        "kind": "git"
+      }
+    ],
+    "file": "package-lock.json"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "project": {
+    "root": "<root>",
+    "pm": "pnpm",
+    "lockfiles": [
+      "pnpm-lock.yaml"
+    ],
+    "workspaces": [],
+    "packageJsonStatus": "ok",
+    "packageManagerField": "pnpm@10.15.0",
+    "pmVersion": "10.15.0"
+  },
+  "config": {
+    "lifecycleScripts": "allowlisted",
+    "gitDepsPolicy": "unrestricted",
+    "npmrcDangers": [],
+    "npmrcStatus": "missing",
+    "workspaceYamlStatus": "ok",
+    "cooldownMinutes": 1440,
+    "scriptAllowlist": [
+      "esbuild"
+    ]
+  },
+  "lockfile": {
+    "status": "ok",
+    "sources": [],
+    "file": "pnpm-lock.yaml"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "project": {
+    "root": "<root>",
+    "pm": "npm",
+    "lockfiles": [
+      "package-lock.json"
+    ],
+    "workspaces": [
+      "packages/app"
+    ],
+    "packageJsonStatus": "ok",
+    "packageManagerField": "npm@11.10.0",
+    "pmVersion": "11.10.0"
+  },
+  "config": {
+    "lifecycleScripts": "blocked",
+    "gitDepsPolicy": "none-allowed",
+    "npmrcDangers": [],
+    "npmrcStatus": "ok",
+    "workspaceYamlStatus": "not-applicable",
+    "saveExact": true,
+    "cooldownMinutes": 20160
+  },
+  "lockfile": {
+    "status": "ok",
+    "sources": [
+      {
+        "file": "package-lock.json",
+        "name": "left-pad",
+        "url": "https://registry.npmjs.org/left-pad/-/left-pad-1.3.0.tgz",
+        "kind": "registry-tarball",
+        "integrity": "sha512-XI5MPzVNApjAyhQzphX8BkmKsKUxD4LdyK24iZeQGinBN9yTQT3bFlCBy/aVx2HrNcqQGsdot8yDtgTWSzvpGw=="
+      }
+    ],
+    "file": "package-lock.json"
+  }
+}

@@ -122,8 +122,16 @@ function isInside(child: string, parent: string): boolean {
  * component, and realpath verification of the existing ancestor chain (so a
  * symlinked directory cannot smuggle the path outside). Returns the absolute
  * path to use for the actual fs operation.
+ *
+ * `allowSymlinkFinal` permits a symlink as the *final* component — used only
+ * by lstat/exists so a symlinked config file is detectable as such (its
+ * content still cannot be read: readTextFile refuses symlinks separately).
  */
-export function resolveWithinRoot(root: string, relative: string): string {
+export function resolveWithinRoot(
+  root: string,
+  relative: string,
+  opts?: { allowSymlinkFinal?: boolean },
+): string {
   const rootReal = realpathSafe(root);
   const abs = path.resolve(rootReal, relative);
   if (!isInside(abs, rootReal)) {
@@ -131,7 +139,14 @@ export function resolveWithinRoot(root: string, relative: string): string {
   }
   const st = lstatSafe(abs);
   if (st?.kind === "symlink") {
-    throw new IoError("symlink", abs, "refusing to follow symlink");
+    if (opts?.allowSymlinkFinal !== true) {
+      throw new IoError("symlink", abs, "refusing to follow symlink");
+    }
+    // Containment check applies to the parent chain, not the link target.
+    if (!isInside(realpathSafe(path.dirname(abs)), rootReal)) {
+      throw new IoError("outside-root", abs, `path resolves outside project root ${rootReal}`);
+    }
+    return abs;
   }
   if (st !== undefined) {
     // Exists and is not itself a symlink: realpath resolves any symlinked
@@ -170,13 +185,13 @@ export function createProjectReader(root: string, defaults?: { maxBytes?: number
       return readTextFile(abs, { maxBytes: opts?.maxBytes ?? defaults?.maxBytes ?? DEFAULT_MAX_BYTES });
     },
     lstat(relativePath) {
-      return lstatSafe(resolveWithinRoot(rootReal, relativePath));
+      return lstatSafe(resolveWithinRoot(rootReal, relativePath, { allowSymlinkFinal: true }));
     },
     listDir(relativePath) {
       return listDir(resolveWithinRoot(rootReal, relativePath));
     },
     exists(relativePath) {
-      return lstatSafe(resolveWithinRoot(rootReal, relativePath)) !== undefined;
+      return lstatSafe(resolveWithinRoot(rootReal, relativePath, { allowSymlinkFinal: true })) !== undefined;
     },
   };
 }

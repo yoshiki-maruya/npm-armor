@@ -1,0 +1,9 @@
+{
+  "name": "golden-npm-recommended-single",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "left-pad": "1.3.0"
+  },
+  "packageManager": "npm@11.10.0"
+}
