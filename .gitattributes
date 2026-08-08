@@ -1,0 +1,5 @@
+# Force LF checkouts on every platform. Windows runners default to
+# core.autocrlf=true, which rewrites LF -> CRLF on checkout; golden fixtures
+# and their expected-*.json snapshots are compared byte-for-byte, so a CRLF
+# checkout breaks every one of them on windows-latest.
+* text=auto eol=lf
