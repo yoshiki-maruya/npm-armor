@@ -96,6 +96,29 @@ by `scripts/check-restrictions.mts`.
 
 See [SECURITY.md](SECURITY.md) for reporting vulnerabilities.
 
+## Releasing
+
+Every release after the first ships via `.github/workflows/release.yml`
+(`git push` a `v*` tag) using OIDC Trusted Publishing — no npm token is
+stored anywhere in this repository or its CI.
+
+npm requires a package to already exist on the registry before a Trusted
+Publisher can be configured for it, so the very first release is a one-time
+manual bootstrap from a maintainer's own authenticated session:
+
+```console
+$ npm login                 # if not already logged in
+$ npm test && npm run check:restrictions && npm run check:package
+$ npm publish                # publishes npm-armor@<version from package.json>
+```
+
+Then, on npmjs.com, **package Settings → Trusted Publisher**: choose GitHub
+Actions, set owner/repo to this repository and workflow filename to
+`release.yml`, and allow `npm publish`. Finally, **Settings → Publishing
+access → require 2FA and disallow tokens**, so every release after this one
+can only happen through the exact GitHub Actions workflow in this repo — no
+token-based publish is possible again, from here or anywhere else.
+
 ## Development
 
 ```console
