@@ -18,7 +18,11 @@ export function runCli(args: readonly string[], opts?: { cwd?: string; env?: Rec
   const r = spawnSync(process.execPath, [cli, ...args], {
     cwd: opts?.cwd ?? repo,
     encoding: "utf8",
-    env: { ...process.env, NO_COLOR: "1", ...opts?.env },
+    // FORCE_COLOR takes precedence over NO_COLOR in colorEnabled() (matches
+    // chalk/supports-color convention) — clear both so E2E output is
+    // deterministic regardless of the ambient shell (many terminals/IDEs
+    // set FORCE_COLOR).
+    env: { ...process.env, FORCE_COLOR: "", NO_COLOR: "1", ...opts?.env },
   });
   if (r.error !== undefined) throw r.error;
   return { status: r.status ?? -1, stdout: r.stdout, stderr: r.stderr };
