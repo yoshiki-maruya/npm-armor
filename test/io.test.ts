@@ -173,11 +173,16 @@ test("atomicWrite creates, replaces, preserves permissions and refuses symlinks"
     atomicWrite(target, "a=1\n");
     assert.equal(readFileRaw(target), "a=1\n");
 
-    // Replace, preserving a restrictive mode
+    // Replace, preserving a restrictive mode. Windows has no POSIX
+    // owner/group/other bits (chmod only toggles the read-only attribute,
+    // so 0o600 round-trips as 0o666) — verify the byte-for-byte mode
+    // preservation only where the OS actually supports it.
     fs.chmodSync(target, 0o600);
     atomicWrite(target, "a=2\n");
     assert.equal(readFileRaw(target), "a=2\n");
-    assert.equal((lstatSafe(target)?.mode ?? 0) & 0o777, 0o600);
+    if (process.platform !== "win32") {
+      assert.equal((lstatSafe(target)?.mode ?? 0) & 0o777, 0o600);
+    }
 
     // No temp litter left behind
     assert.deepEqual(
