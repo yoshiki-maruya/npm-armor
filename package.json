@@ -4,6 +4,14 @@
   "description": "Diagnose and fix supply-chain defense settings of JavaScript projects. Zero dependencies, zero network, zero execution.",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yoshiki-maruya/npm-armor.git"
+  },
+  "homepage": "https://github.com/yoshiki-maruya/npm-armor#readme",
+  "bugs": {
+    "url": "https://github.com/yoshiki-maruya/npm-armor/issues"
+  },
   "bin": {
     "armor": "dist/bin/armor.js"
   },
