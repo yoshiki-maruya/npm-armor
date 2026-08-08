@@ -1,6 +1,6 @@
 {
   "name": "npm-armor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Diagnose and fix supply-chain defense settings of JavaScript projects. Zero dependencies, zero network, zero execution.",
   "type": "module",
   "license": "MIT",
